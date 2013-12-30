@@ -19,7 +19,7 @@ class RequestHandler {
                 
     /**
      * 
-     * @var Parplu\RequestHandler
+     * @var \Parplu\Controllers\RESTful\Controller
      */
     protected $handler;
     
@@ -50,7 +50,7 @@ class RequestHandler {
     }
     
     public function handleRequest() {
-        return $this->getHandler()->handleRequest();
+        return $this->handler->handleRequest();
     }
     
     public function getResponse() {
@@ -59,11 +59,15 @@ class RequestHandler {
     
     protected function loadHandler() {
         if (array_key_exists('handler', $this->request)) {
-            $this->handler = trim(strtoupper($this->request['handler']));
+            $this->handler = $this->getHandler($this->sanitize($this->request['handler']));
         } else {
             throw new \Exception("Bad Request: No Handler Requested", 401);
         }
         return $this;
+    }
+    
+    private function sanitize($string) {
+        return trim(strtoupper($string));
     }
     
 }
