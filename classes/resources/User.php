@@ -14,5 +14,10 @@ class User extends Struct {
     protected $password;
     protected $dateCreated;
     protected $lastUpdated;
+    
+    protected function init() {
+        parent::init();
+        $this->internal[] = 'password';
+    }
 
 }

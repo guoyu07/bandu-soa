@@ -69,9 +69,18 @@ abstract class LocalResourceManager {
     }
 
     protected function retrieveResourceProperties($resource) {
-        $properties = $this->getResourceProperties($resource);
-        $retrievePropertiesQueries = $this->populateQueries('retrieve', 'properties', $properties);
-        if ($this->db->execute($retrievePropertiesQueries[0])) {
+        $properties = array();
+        foreach ($this->getProperties() as $prop => $data) {
+            $getter = 'get'.ucfirst($prop);
+            $value = $resource->$getter();
+            if (!is_null($value)) {
+                $properties[] = sprintf("%s = '%s'", $data['field'], $value);
+            }
+        }
+        $whereClause = implode(' AND ', $properties);
+        $query = $this->queries['retrieve']['properties'][0];
+        $retrieveQuery = str_replace(':where', $whereClause, $query);
+        if ($this->db->execute($retrieveQuery)) {
             $resourceProperties = $this->db->fetchRow();
             $resource->setProperties($resourceProperties);
         }
@@ -292,9 +301,8 @@ abstract class LocalResourceManager {
             $args = array(
                     implode(', ', $fields),
                     $table,
-                    $this->getResourceFilter(),
             );
-            $this->queries['retrieve']['properties'][] = vsprintf("SELECT %s FROM %s WHERE %s", $args);
+            $this->queries['retrieve']['properties'][] = vsprintf("SELECT %s FROM %s WHERE :where", $args);
         }
         foreach ($this->metaData['associations'] as $property => $input) {
             $assocArgs = array(

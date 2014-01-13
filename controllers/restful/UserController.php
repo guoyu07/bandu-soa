@@ -21,7 +21,8 @@ class UserController extends Controller {
         $rm = new UsersManager($db);
 
         $user = new User(array(
-                'id' => '1',
+                'emailAddress' => 'su@aboynamedsu.net',
+                'password' => md5('p4$$word!'),
         ));
 
         $rm->retrieve($user);
