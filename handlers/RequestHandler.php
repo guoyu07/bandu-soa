@@ -37,10 +37,10 @@ class RequestHandler {
      * @throws Exception
      * @return \Parplu\Controllers\RESTful\Controller
      */
-    public function getHandler() {
-        switch($this->handler) {
-            case array_key_exists($this->handler, $this->handlers):
-                $controller = $this->handlers[$this->handler];
+    public function getHandler($handler) {
+        switch($handler) {
+            case array_key_exists($handler, $this->handlers):
+                $controller = $this->handlers[$handler];
                 return new $controller($this->request);
                 break;
             default:
