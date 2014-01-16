@@ -28,6 +28,42 @@ class UserController extends Controller {
     }
 
     public function handleGet() {
+        $user = $this->getUserFromRequest();
+        return $user->render('JSON');
+    }
+
+    public function handlePost() {
+        $user = new User($this->getRequestData());
+        if ($user->isValid('create')) {
+            $this->userManager->create($user);
+        }
+        return $user->render('JSON');
+    }
+
+    public function handlePut() {
+        if (!array_key_exists('id', $this->request)) {
+            throw new \Exception('Resource not found', 404);
+        }
+        $user = new User(array('id' => $this->request['id']));
+        $this->userManager->retrieve($user);
+        $user->setProperties($this->getRequestData());
+        if ($user->isValid('update')) {
+            $this->userManager->update($user);
+        }
+        return $user->render('JSON');
+    }
+
+    public function handleDelete() {
+        if (!array_key_exists('id', $this->request)) {
+            throw new \Exception('Resource not found', 404);
+        }
+        $user = new User(array('id' => $this->request['id']));
+        $this->userManager->retrieve($user);
+        $this->userManager->delete($user);
+        return null;
+    }
+    
+    protected function getUserFromRequest() {
         $user = new User();
         $properties = array();
         foreach (array_keys($user->getProperties()) as $property) {
@@ -37,30 +73,7 @@ class UserController extends Controller {
         }
         $user->setProperties($properties);
         $this->userManager->retrieve($user);
-        return $user->render('JSON');
-    }
-
-    public function handlePost() {
-        $payload = file_get_contents('php://input');
-        if (!strlen($payload)) {
-            throw new \Exception('No Request Data');
-        }
-        if (!($properties = json_decode($payload, true))) {
-            throw new \Exception('Invalid Request Data');
-        }
-        $user = new User($properties);
-        if ($user->isValid('create')) {
-            $this->userManager->create($user);
-        }
-        return $user->render('JSON');
-    }
-
-    public function handlePut() {
-        return "put";
-    }
-
-    public function handleDelete() {
-        return "delete";
+        return $user;
     }
 
 }

@@ -47,4 +47,15 @@ abstract class Controller {
     
     abstract public function handleDelete();
     
+    protected function getRequestData() {
+        $payload = file_get_contents('php://input');
+        if (!strlen($payload)) {
+            throw new \Exception('No Request Data');
+        }
+        if (!($properties = json_decode($payload, true))) {
+            throw new \Exception('Invalid Request Data');
+        }
+        return $properties;
+    }
+    
 }

@@ -30,13 +30,17 @@ require_once '../controllers/restful/Controller.php';
 $request = new RESTfulRequest();
 
 $user1 = json_encode(array(
-        'firstName' => 'Suhmayah',
+        'firstName' => 'Suhmayah Ayunwi',
         'lastName' => 'Banda',
         'dateOfBirth' => mktime(12, 0, 0, 9, 11, 1985),
         'emailAddress' => 'su@aboynamedsu.net',
         'password' => md5('p4$$word!'),
         'dateCreated' => time(),
         'lastUpdated' => time(),
+        'applications' => array(
+            array('appId' => 1),
+            array('appId' => 2),
+        ),
 ), true);
 
 $user2 = json_encode(array(
@@ -59,6 +63,8 @@ $user3 = json_encode(array(
 
 $user3 = $user1;
 
-echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user1)->send()->getResponse();
-echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user2)->send()->getResponse();
-echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user3)->send()->getResponse();
+echo $request->setRequestURL("http://services.parplu.com?resource=user&id=2")->setRequestMethod(RESTfulRequest::GET)->send()->getResponse();
+
+echo $request->setRequestURL("http://services.parplu.com?resource=user&id=2")->setRequestMethod(RESTfulRequest::DELETE)->send()->getResponse();
+//echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user2)->send()->getResponse();
+//echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user3)->send()->getResponse();

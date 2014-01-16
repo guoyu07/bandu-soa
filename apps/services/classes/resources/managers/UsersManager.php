@@ -65,7 +65,18 @@ class UsersManager extends LocalResourceManager {
     }
     
     protected function getAssociations() {
-        return array();
+        return array(
+            'applications' => array(
+                'table' => 'Applications__Users',
+                'filter' => array(
+                    'id' => 'userId',
+                ),
+                'fields' => array(
+                    'appId',
+                ),
+                'callback' => array(),
+            ),
+        );
     }
     
     protected function getCollections() {

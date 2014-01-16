@@ -15,6 +15,8 @@ class User extends Struct {
     protected $dateCreated;
     protected $lastUpdated;
     
+    protected $applications;
+    
     private $required;
     
     protected function init() {
@@ -24,14 +26,24 @@ class User extends Struct {
 
         $this->required = array(
             'create' => $this->getRequiredCreateProperties(),
+            'update' => $this->getRequiredUpdateProperties(),
         );
     }
     
     protected function getRequiredCreateProperties() {
         $properties = array_keys($this->getProperties());
-        $keys = array_keys($properties, 'id');
-        unset($properties[$keys[0]]);
+        
+        list($id) = array_keys($properties, 'id');
+        unset($properties[$id]);
+        
+        list($applications) = array_keys($properties, 'applications');
+        unset($properties[$applications]);
+        
         return $properties;
+    }
+    
+    protected function getRequiredUpdateProperties() {
+        return array_keys($this->getProperties());
     }
     
     public function isValid($method) {

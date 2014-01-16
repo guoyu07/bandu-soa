@@ -109,7 +109,14 @@ abstract class LocalResourceManager {
     public function delete(&$resource) {
         $properties = $this->getResourceProperties($resource);
         $deleteAssociationsQueries = $this->populateQueries('delete', 'associations', $properties);
+        foreach ($deleteAssociationsQueries as $q) {
+            $this->db->execute($q);
+        }
         $deletePropertiesQueries= $this->populateQueries('delete', 'properties', $properties);
+        foreach ($deletePropertiesQueries as $q) {
+            $this->db->execute($q);
+        }
+        unset($user);
         return true;
     }
 
