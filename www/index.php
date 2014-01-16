@@ -25,38 +25,40 @@ require_once '../lib/bandu/orm/Collection.php';
 require_once '../lib/bandu/orm/LocalResourceManager.php';
 require_once '../lib/bandu/requests/RESTfulRequest.php';
 require_once '../handlers/RequestHandler.php';
-require_once '../classes/resources/managers/UsersManager.php';
-require_once '../classes/resources/User.php';
 require_once '../controllers/restful/Controller.php';
-require_once '../controllers/restful/UserController.php';
 
-$_SERVER['REQUEST_METHOD'] = 'get';
+$request = new RESTfulRequest();
 
-$requestHandler = new Handlers\RequestHandler(array('handler' => "User"));
-echo $requestHandler->handleRequest();
+$user1 = json_encode(array(
+        'firstName' => 'Suhmayah',
+        'lastName' => 'Banda',
+        'dateOfBirth' => mktime(12, 0, 0, 9, 11, 1985),
+        'emailAddress' => 'su@aboynamedsu.net',
+        'password' => md5('p4$$word!'),
+        'dateCreated' => time(),
+        'lastUpdated' => time(),
+), true);
 
-// $request = new RESTfulRequest();
-// echo $request->setRequestURL("https://github.com")->setRequestMethod(RESTfulRequest::GET)->send()->getResponse();
+$user2 = json_encode(array(
+        'firstName' => 'Albert',
+        'lastName' => 'Banda',
+        'dateOfBirth' => mktime(12, 0, 0, 6, 24, 1984),
+        'emailAddress' => 'al.banda624@gmail.com',
+        'password' => md5('p4$$word!'),
+        'dateCreated' => time(),
+        'lastUpdated' => time(),
+), true);
 
-// $db = new database\MySQLWrapper(array(
-//         'server' => 'localhost',
-//         'user' => 'root',
-//         'password' => 'p4$$word!',
-//         'db' => 'parplu'
-// ));
+$user3 = json_encode(array(
+        'firstName' => 'Faux',
+        'lastName' => 'Banda',
+        'dateOfBirth' => mktime(12, 0, 0, 6, 9, 1987),
+        'dateCreated' => time(),
+        'lastUpdated' => time(),
+), true);
 
-// $rm = new managers\UsersManager($db);
+$user3 = $user1;
 
-// $user = new User(array(
-//         'firstName' => 'Suhmayah',
-//         'lastName' => 'Banda',
-//         'dateOfBirth' => mktime(12, 0, 0, 9, 11, 1985),
-//         'emailAddress' => 'su@aboynamedsu.net',
-//         'password' => md5('p4$$word!'),
-//         'dateCreated' => time(),
-//         'lastUpdated' => time(),
-// ));
-
-// $rm->create($user);
-
-// print_r($user);
+echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user1)->send()->getResponse();
+echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user2)->send()->getResponse();
+echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user3)->send()->getResponse();

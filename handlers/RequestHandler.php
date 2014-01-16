@@ -2,14 +2,9 @@
 
 namespace Parplu\Handlers;
 
-class RequestHandler {
+abstract class RequestHandler {
     
-    const RESOURCE = "RESOURCE";
-    const SERVICE = "SERVICE";
-    
-    protected $handlers = array(
-        'USER' => '\Parplu\Controllers\Restful\UserController',
-    );
+    protected $controllers = array();
     
     /**
      * 
@@ -21,48 +16,42 @@ class RequestHandler {
      * 
      * @var \Parplu\Controllers\RESTful\Controller
      */
-    protected $handler;
+    protected $controller;
     
     public function __construct(array $request) {
         $this->request = $request;
+        $this->controllers = $this->loadControllers();
         $this->init();
     }
     
     protected function init() {
-        $this->loadHandler();
+        if (!array_key_exists('resource', $this->request)) {
+            throw new \Exception("Bad Request: No Handler Requested", 401);
+        }
+        $this->loadController($this->sanitize($this->request['resource']));
     }
     
-    /**
-     * 
-     * @throws Exception
-     * @return \Parplu\Controllers\RESTful\Controller
-     */
-    public function getHandler($handler) {
-        switch($handler) {
-            case array_key_exists($handler, $this->handlers):
-                $controller = $this->handlers[$handler];
-                return new $controller($this->request);
-                break;
-            default:
-                throw new \Exception("Invalid Request: Unknown Resource", 404);
-                break;
-        }
-    }
+    abstract protected function loadControllers();
     
     public function handleRequest() {
-        return $this->handler->handleRequest();
+        return $this->controller->handleRequest();
     }
     
     public function getResponse() {
         return "Request Successful: ".$this->handler;
     }
     
-    protected function loadHandler() {
-        if (array_key_exists('handler', $this->request)) {
-            $this->handler = $this->getHandler($this->sanitize($this->request['handler']));
-        } else {
-            throw new \Exception("Bad Request: No Handler Requested", 401);
+    /**
+     * 
+     * @param string $resource
+     * @throws \Exception
+     */
+    protected function loadController($resource) {
+        if (!array_key_exists($resource, $this->controllers)) {
+            throw new \Exception("Resource Not Found: $resource", 404);
         }
+        $controllerClass = $this->controllers[$resource];
+        $this->controller = new $controllerClass($this->request);
         return $this;
     }
     

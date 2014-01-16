@@ -131,16 +131,19 @@ abstract class LocalResourceManager {
             $id = $this->db->execute($createQueries[0]);
             $resource->setId($id);
         } catch (\Exception $e) {
-
+            die($e->getMessage());
         }
         return $resource;
     }
 
     protected function createResourceAssociations($resource) {
-        if (count($this->associations) == 0) {
+        if (!count($this->associations)) {
             return $resource;
         }
         $associations = $this->getResourceAssociations($resource);
+        if (!count($associations)) {
+            return $resource;
+        }
         $this->populateQueries('create', 'associations', $associations);
         foreach ($this->queries['create']['associations'] as $q) {
             $arguments = array();
