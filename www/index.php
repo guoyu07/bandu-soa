@@ -2,6 +2,8 @@
 
 namespace Parplu;
 
+use Parplu\Apps\Services\Handlers\ServiceHandler;
+
 use parplu\resources\User;
 
 use parplu\resources\managers\UsersManager;
@@ -16,55 +18,27 @@ use bandu\database;
 
 use bandu\requests\RESTfulRequest;
 
-require_once '../lib/bandu/database/MySQLWrapper.php';
-require_once '../lib/bandu/objects/Struct.php';
-require_once '../lib/bandu/orm/ORMComponent.php';
-require_once '../lib/bandu/orm/Property.php';
-require_once '../lib/bandu/orm/Association.php';
-require_once '../lib/bandu/orm/Collection.php';
-require_once '../lib/bandu/orm/LocalResourceManager.php';
-require_once '../lib/bandu/requests/RESTfulRequest.php';
-require_once '../handlers/RequestHandler.php';
-require_once '../controllers/restful/Controller.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/database/MySQLWrapper.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/objects/Struct.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/objects/Resource.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/orm/ORMComponent.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/orm/Property.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/orm/Association.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/orm/Collection.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/orm/LocalResourceManager.php';
+require_once '/home/sbanda/workspace/Parplu-Server/lib/bandu/requests/RESTfulRequest.php';
+require_once '/home/sbanda/workspace/Parplu-Server/handlers/RequestHandler.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/handlers/ServiceHandler.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/classes/resources/managers/UsersManager.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/classes/resources/managers/ApplicationsManager.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/classes/resources/managers/DespatchesManager.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/classes/resources/User.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/classes/resources/Application.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/classes/resources/Despatch.php';
+require_once '/home/sbanda/workspace/Parplu-Server/controllers/restful/Controller.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/controllers/restful/UserController.php';
+require_once '/home/sbanda/workspace/Parplu-Server/apps/services/controllers/restful/DespatchController.php';
 
-$request = new RESTfulRequest();
-
-$user1 = json_encode(array(
-        'firstName' => 'Suhmayah Ayunwi',
-        'lastName' => 'Banda',
-        'dateOfBirth' => mktime(12, 0, 0, 9, 11, 1985),
-        'emailAddress' => 'su@aboynamedsu.net',
-        'password' => md5('p4$$word!'),
-        'dateCreated' => time(),
-        'lastUpdated' => time(),
-        'applications' => array(
-            array('appId' => 1),
-            array('appId' => 2),
-        ),
-), true);
-
-$user2 = json_encode(array(
-        'firstName' => 'Albert',
-        'lastName' => 'Banda',
-        'dateOfBirth' => mktime(12, 0, 0, 6, 24, 1984),
-        'emailAddress' => 'al.banda624@gmail.com',
-        'password' => md5('p4$$word!'),
-        'dateCreated' => time(),
-        'lastUpdated' => time(),
-), true);
-
-$user3 = json_encode(array(
-        'firstName' => 'Faux',
-        'lastName' => 'Banda',
-        'dateOfBirth' => mktime(12, 0, 0, 6, 9, 1987),
-        'dateCreated' => time(),
-        'lastUpdated' => time(),
-), true);
-
-$user3 = $user1;
-
-echo $request->setRequestURL("http://services.parplu.com?resource=user&id=2")->setRequestMethod(RESTfulRequest::GET)->send()->getResponse();
-
-echo $request->setRequestURL("http://services.parplu.com?resource=user&id=2")->setRequestMethod(RESTfulRequest::DELETE)->send()->getResponse();
-//echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user2)->send()->getResponse();
-//echo $request->setRequestURL("http://services.parplu.com?resource=user")->setRequestMethod(RESTfulRequest::POST)->setPayload($user3)->send()->getResponse();
+$requestHandler = new ServiceHandler($_GET);
+header('Content-Type: text/json');
+echo $requestHandler->handleRequest();

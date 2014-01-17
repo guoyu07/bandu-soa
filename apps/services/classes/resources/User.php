@@ -2,9 +2,9 @@
 
 namespace parplu\resources;
 
-use kongossa\objects\Struct;
+use kongossa\objects\Resource;
 
-class User extends Struct {
+class User extends Resource {
 
     protected $id;
     protected $firstName;
@@ -16,18 +16,11 @@ class User extends Struct {
     protected $lastUpdated;
     
     protected $applications;
-    
-    private $required;
-    
+        
     protected function init() {
         parent::init();
         $this->internal[] = 'password';
         $this->internal[] = 'required';
-
-        $this->required = array(
-            'create' => $this->getRequiredCreateProperties(),
-            'update' => $this->getRequiredUpdateProperties(),
-        );
     }
     
     protected function getRequiredCreateProperties() {
@@ -46,14 +39,4 @@ class User extends Struct {
         return array_keys($this->getProperties());
     }
     
-    public function isValid($method) {
-        foreach ($this->required[$method] as $property) {
-            $getter = 'get'.ucfirst($property);
-            if (is_null($this->$getter())) {
-                throw new \Exception("Missing Required Argument: $property");
-            }
-        }
-        return true;
-    }
-
 }

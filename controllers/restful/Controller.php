@@ -2,6 +2,10 @@
 
 namespace Parplu\Controllers\RESTful;
 
+use kongossa\objects\Struct;
+
+use bandu\orm\LocalResourceManager;
+
 abstract class Controller {
     
     const GET = 'GET';
@@ -14,7 +18,7 @@ abstract class Controller {
      * @var array
      */
     protected $request;
-    
+        
     public function __construct(array $request) {
         $this->request = $request;
     }
@@ -47,6 +51,8 @@ abstract class Controller {
     
     abstract public function handleDelete();
     
+    abstract protected function getResourceManager();
+    
     protected function getRequestData() {
         $payload = file_get_contents('php://input');
         if (!strlen($payload)) {
@@ -56,6 +62,18 @@ abstract class Controller {
             throw new \Exception('Invalid Request Data');
         }
         return $properties;
+    }
+    
+    protected function getResourceFromRequest(Struct $resource) {
+        $properties = array();
+        foreach (array_keys($resource->getProperties()) as $property) {
+            if(array_key_exists($property, $this->request)) {
+                $properties[$property] = $this->request[$property];
+            }
+        }
+        $resource->setProperties($properties);
+        $this->getResourceManager()->retrieve($resource);
+        return $resource;
     }
     
 }

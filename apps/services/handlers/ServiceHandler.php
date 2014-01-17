@@ -8,7 +8,8 @@ class ServiceHandler extends RequestHandler {
     
     protected function loadControllers() {
         return array(
-            'USER' => '\Parplu\Controllers\Restful\UserController',
+            'USER' => '\Parplu\Controllers\RESTful\UserController',
+            'DESPATCH' => '\Parplu\Controllers\RESTful\DespatchController',
         );
     }
         
