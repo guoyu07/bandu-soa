@@ -19,7 +19,6 @@ class User extends Resource {
         
     protected function init() {
         parent::init();
-        $this->internal[] = 'password';
         $this->internal[] = 'required';
     }
     

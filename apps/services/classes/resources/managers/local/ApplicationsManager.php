@@ -1,56 +1,48 @@
 <?php
 
-namespace parplu\resources;
+namespace parplu\resources\managers\local;
 
-use bandu\orm\LocalResourceManager;
+use bandu\orm;
 
-class DespatchesManager extends LocalResourceManager {
+class ApplicationsManager extends orm\LocalResourceManager {
     
     protected function getDefaults() {
         return array(
-            'table' => 'Despatches',
+            'table' => 'Applications',
             'filter' => array(
-                'id' => 'id',
+                'id',
             ),
         );
     }
-    
+
     protected function getProperties() {
         return array(
             'id' => array(
                 'field' => 'id',
                 'rules' => array(
-                    'READ_ONLY',
+                	'READ_ONLY'
                 ),
                 'callback' => array(),
             ),
-            'recipientId' => array(
-                'field' => 'recipientId',
+            'name' => array(
+                'field' => 'name',
                 'rules' => array(),
                 'callback' => array(),
             ),
-            'type' => array(
-                'field' => 'type',
-                'rules' => array(),
-                'callback' => array(),
-            ),
-            'medium' => array(
-                'field' => 'medium',
+            'reference' => array(
+                'field' => 'reference',
                 'rules' => array(),
                 'callback' => array(),
             ),
             'dateCreated' => array(
                 'field' => 'dateCreated',
-                'rules' => array(),
+                'rules' => array(
+                    'CREATE_ONLY'
+                ),
                 'callback' => array(),
             ),
-            'dateDue' => array(
-                'field' => 'dateDue',
-                'rules' => array(),
-                'callback' => array(),
-            ),
-            'status' => array(
-                'field' => 'status',
+            'lastUpdated' => array(
+                'field' => 'lastUpdated',
                 'rules' => array(),
                 'callback' => array(),
             ),
@@ -59,22 +51,21 @@ class DespatchesManager extends LocalResourceManager {
     
     protected function getAssociations() {
         return array(
-            'data' => array(
-                'table' => 'Despatches__Data',
-                'fields' => array(
-                    'dataKey',
-                    'dataValue',
-                ),
+            'users' => array(
+                'table' => 'Applications__Users',
                 'filter' => array(
-                    'id' => 'despatchId',
+                    'id' => 'appId',
+                ),
+                'fields' => array(
+                    'userId',
                 ),
                 'callback' => array(),
-            ),
+            )
         );
     }
     
     protected function getCollections() {
         return array();
     }
-    
+
 }

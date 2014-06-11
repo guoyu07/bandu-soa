@@ -4,7 +4,7 @@ namespace Parplu\Controllers\RESTful;
 
 use parplu\resources\User;
 
-use parplu\resources\managers\UsersManager;
+use parplu\resources\managers\local\UsersManager;
 
 use bandu\database\MySQLWrapper;
 

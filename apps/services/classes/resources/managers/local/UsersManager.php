@@ -1,6 +1,6 @@
 <?php
 
-namespace parplu\resources\managers;
+namespace parplu\resources\managers\local;
 
 use bandu\orm\LocalResourceManager;
 

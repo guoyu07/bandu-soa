@@ -1,14 +1,6 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: Bandu
- * Date: 05/09/2013
- * Time: 14:44
- * To change this template use File | Settings | File Templates.
- */
 
 namespace bandu\orm;
-
 
 use bandu\database\MySQLWrapper;
 
@@ -394,8 +386,10 @@ abstract class LocalResourceManager {
                 $assoc[$field] = $resource->$getProperty();
             }
             $getter = "get".ucfirst($property);
-            foreach ($resource->$getter() as $association) {
-                $resourceAssociations[$property][] = array_merge($assoc, $association);
+            if (is_array($resource->getter())) {
+                foreach ($resource->$getter() as $association) {
+                    $resourceAssociations[$property][] = array_merge($assoc, $association);
+                }
             }
         }
         return $resourceAssociations;

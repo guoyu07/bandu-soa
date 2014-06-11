@@ -1,6 +1,8 @@
 <?php
 
-namespace Parplu\Controllers\RESTful;
+namespace Parplu\Controllers\Resources;
+
+use Parplu\Controllers\RESTful\Controller;
 
 use parplu\resources\User;
 

@@ -1,14 +1,16 @@
 <?php
 
+namespace parplu\resources\manager\local;
+
 use bandu\orm\LocalResourceManager;
 
-class InstitutionsManager extends LocalResourceManager {
+class DespatchesManager extends LocalResourceManager {
     
     protected function getDefaults() {
         return array(
-            'table' => 'Institutions',
+            'table' => 'Despatches',
             'filter' => array(
-                'id' => 'id'
+                'id' => 'id',
             ),
         );
     }
@@ -18,12 +20,12 @@ class InstitutionsManager extends LocalResourceManager {
             'id' => array(
                 'field' => 'id',
                 'rules' => array(
-                    'READ_ONLY'
+                    'READ_ONLY',
                 ),
                 'callback' => array(),
             ),
-            'name' => array(
-                'field' => 'name',
+            'recipientId' => array(
+                'field' => 'recipientId',
                 'rules' => array(),
                 'callback' => array(),
             ),
@@ -32,30 +34,39 @@ class InstitutionsManager extends LocalResourceManager {
                 'rules' => array(),
                 'callback' => array(),
             ),
+            'medium' => array(
+                'field' => 'medium',
+                'rules' => array(),
+                'callback' => array(),
+            ),
             'dateCreated' => array(
                 'field' => 'dateCreated',
                 'rules' => array(),
                 'callback' => array(),
             ),
-            'lastUpdated' => array(
-                'field' => 'lastUpdated',
+            'dateDue' => array(
+                'field' => 'dateDue',
                 'rules' => array(),
                 'callback' => array(),
             ),
-            
+            'status' => array(
+                'field' => 'status',
+                'rules' => array(),
+                'callback' => array(),
+            ),
         );
     }
     
     protected function getAssociations() {
         return array(
             'data' => array(
-                'table' => 'Institutions__Data',
-                'filter' => array(
-                    'id' => 'institutionId',
-                ),
+                'table' => 'Despatches__Data',
                 'fields' => array(
                     'dataKey',
                     'dataValue',
+                ),
+                'filter' => array(
+                    'id' => 'despatchId',
                 ),
                 'callback' => array(),
             ),

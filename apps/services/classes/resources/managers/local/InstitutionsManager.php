@@ -1,26 +1,26 @@
 <?php
 
-namespace parplu\resources\managers;
+namespace parplu\resources\managers\local;
 
-use bandu\orm;
+use bandu\orm\LocalResourceManager;
 
-class ApplicationsManager extends orm\LocalResourceManager {
+class InstitutionsManager extends LocalResourceManager {
     
     protected function getDefaults() {
         return array(
-            'table' => 'Applications',
+            'table' => 'Institutions',
             'filter' => array(
-                'id',
+                'id' => 'id'
             ),
         );
     }
-
+    
     protected function getProperties() {
         return array(
             'id' => array(
                 'field' => 'id',
                 'rules' => array(
-                	'READ_ONLY'
+                    'READ_ONLY'
                 ),
                 'callback' => array(),
             ),
@@ -29,8 +29,8 @@ class ApplicationsManager extends orm\LocalResourceManager {
                 'rules' => array(),
                 'callback' => array(),
             ),
-            'reference' => array(
-                'field' => 'reference',
+            'type' => array(
+                'field' => 'type',
                 'rules' => array(),
                 'callback' => array(),
             ),
@@ -44,26 +44,28 @@ class ApplicationsManager extends orm\LocalResourceManager {
                 'rules' => array(),
                 'callback' => array(),
             ),
+            
         );
     }
     
     protected function getAssociations() {
         return array(
-            'users' => array(
-                'table' => 'Applications__Users',
+            'data' => array(
+                'table' => 'Institutions__Data',
                 'filter' => array(
-                    'id' => 'appId',
+                    'id' => 'institutionId',
                 ),
                 'fields' => array(
-                    'userId',
+                    'dataKey',
+                    'dataValue',
                 ),
                 'callback' => array(),
-            )
+            ),
         );
     }
     
     protected function getCollections() {
         return array();
     }
-
+    
 }
